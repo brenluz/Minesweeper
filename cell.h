@@ -6,20 +6,19 @@
 #define CELL_H
 
 #include <string>
-
+#include <vector>
 
 
 class cell {
+    int cellNumber;
     bool hidden = true;
     bool mine = false;
-    int adjacentMines;
-    cell() {
-        isMine();
-        adjacentMines = 0;
-    }
+    void CellNumber(const std::vector<cell>&, const std::pair<int, int> &pos);
+    bool isMine();
+    std::pair<int, int> pos;
 public:
     std::string appearance;
-    void isMine();
+    explicit cell(int row, int col);
     void changeAppearance(bool _hidden, bool _mine);
 };
 
