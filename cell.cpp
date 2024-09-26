@@ -12,7 +12,7 @@ inline std::bernoulli_distribution distrib(0.5);
 
 cell::cell(int row,int col) {
     isMine();
-    changeAppearance(hidden, mine);
+    changeAppearance(hidden);
     cellNumber = 0;
     pos = std::make_pair(row, col);
 }
@@ -22,11 +22,11 @@ bool cell::isMine() {
     return mine;
 }
 
-void cell::changeAppearance(const bool _hidden, const bool _mine) {
-    if (_hidden) {
+void cell::changeAppearance(const bool hidden) {
+    if (hidden) {
         appearance = "#";
     } else {
-        if (_mine) {
+        if (mine) {
             appearance = "*";
         } else {
             appearance = std::to_string(cellNumber);
@@ -86,4 +86,8 @@ int verticalCheck(const std::pair<int, int> &cur, const std::pair<int, int> &pre
         }
     }
     return number;
+}
+
+int cell::getCellNumber() const {
+    return cellNumber;
 }

@@ -12,14 +12,15 @@
 class cell {
     int cellNumber;
     bool hidden = true;
-    bool mine = false;
     void CellNumber(const std::vector<cell>&, const std::pair<int, int> &pos);
     bool isMine();
     std::pair<int, int> pos;
 public:
     std::string appearance;
     explicit cell(int row, int col);
-    void changeAppearance(bool _hidden, bool _mine);
+    void changeAppearance(bool hidden);
+    bool mine = false;
+    [[nodiscard]] int getCellNumber() const;
 };
 
 
