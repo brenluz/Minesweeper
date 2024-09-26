@@ -9,18 +9,22 @@
 #include <vector>
 
 
-class cell {
+class Cell {
     int cellNumber;
     bool hidden = true;
-    void CellNumber(const std::vector<cell>&, const std::pair<int, int> &pos);
-    bool isMine();
-    std::pair<int, int> pos;
+    bool DefineMines();
+
 public:
+    explicit Cell(int row, int col);
+
     std::string appearance;
-    explicit cell(int row, int col);
-    void changeAppearance(bool hidden);
     bool mine = false;
+    std::pair<int, int> pos;
+    void increaseCellNumber();
+    void changeAppearance(bool hidden);
+
     [[nodiscard]] int getCellNumber() const;
+
 };
 
 

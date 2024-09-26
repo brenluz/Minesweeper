@@ -1,41 +1,44 @@
 #include <iostream>
-#include <vector>
+#include "board.h"
 #include "cell.h"
-
-void printBoard(int count, int size, const std::vector<cell> &board);
+bool play();
 
 int main() {
     int size;
-    // ReSharper disable once CppLocalVariableMayBeConst
-    int count = 0;
-    std::cout << "Enter the size of the board:";
-    std::cin >> size;
-    std::vector <cell> board;
-
-    for(int i = 0; i < size; i++) {
-        for(int j = 0; j < size; j++) {
-            board.emplace_back(i, j);
+    while(play()) {
+        std::cout << "Enter the size of the board:";
+        std::cin >> size;
+        board game(size);
+        game.printBoard();
+        int row, col;
+        std::cout << "enter the first cell" << std::endl;
+        std::cin >> row >> col;
+        Cell currentCell = game.list[row*size+col];
+        while(currentCell.mine == false) {
+            game.list[row*size+col].changeAppearance(false);
+            game.printBoard();
+            std::cout << "enter the next cell" << std::endl;
+            std::cin >> row >> col;
+            currentCell = game.list[row*size+col];
         }
+        game.list[row*size+col].changeAppearance(false);
+        game.printBoard();
+        std::cout << "You hit a mine! Game Over" << std::endl;
     }
-    printBoard(count, size, board);
-    int x = 0,y = 0;
-    cell currentCell = board[x*size + y];
-    while(currentCell.mine == false) {
-        std::cin >> x >> y;
-        board[x*size + y].changeAppearance(false);
-        printBoard(count, size, board);
-        currentCell = board[x*size + y];
-    }
-    std::cout << "Game Over";
     return 0;
 }
 
-void printBoard(int count, const int size, const std::vector<cell> &board) {
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            std::cout << board[count].appearance;
-            count++;
-        }
-        std::cout << std::endl;
+// ReSharper disable once CppNotAllPathsReturnValue
+auto play() -> bool{
+    std::cout << "Do you want to play? (y/n):";
+    char answer;
+    std::cin >> answer;
+    if (answer == 'n' or answer =='N') {
+        return false;
     }
+    if(answer == 'y' or answer == 'Y') {
+        return true;
+    }
+    std::cout << "Invalid input. Turning off." << std::endl;
+    return false;
 }
