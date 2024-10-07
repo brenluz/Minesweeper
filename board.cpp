@@ -1,18 +1,22 @@
 //
-// Created by brenl on 26/09/2024.
+// Created by Brenl on 26/09/2024.
 //
 
 #include "board.h"
-#include <iostream>
 
+#include <functional>
+#include <iostream>
+// Constructor
 board::board(const int size) {
     this->size = size;
     std::cout << "Creating board of size " << size << std::endl;
     createBoard();
     std::cout << "Board created" << std::endl;
     defineCellNumbers();
+    std::cout << "Cell numbers defined" << std::endl;
 }
 
+// Create the board
 void board::createBoard() {
     for(int i = 0; i < size; i++) {
         for(int j = 0; j < size; j++) {
@@ -21,6 +25,7 @@ void board::createBoard() {
     }
 }
 
+// Print the board
 void board::printBoard() const {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -30,36 +35,45 @@ void board::printBoard() const {
     }
 }
 
-void board::defineCellNumbers() const {
-    std::vector<Cell> adjacentCells;
-    for (int i = 0; i < list.size(); i++) {
-        for(int j = 0; j < list.size(); j+=size) {
-            if(i == j) {
-                adjacentCells.emplace_back(list[i+1]);
-                adjacentCells.emplace_back(list[i-size+1]);
-                adjacentCells.emplace_back(list[i+size+1]);
-            }
-        }
-        for (int j = 1; j < list.size()-size; j+=size) {
-            if(i == j) {
-                adjacentCells.emplace_back(list[i-1]);
-                adjacentCells.emplace_back(list[i-size-1]);
-                adjacentCells.emplace_back(list[i+size-1]);
-            }
-        }
-        if(i > size) {
-            adjacentCells.emplace_back(list[i-size]);
-        }
-        if(i < list.size()-size) {
-            adjacentCells.emplace_back(list[i+size]);
-        }
+void board::revealCell(const int row, const int col) {
+    list[row*size+col].revealCell();
     }
-    for (const auto& currentCell : list) {
-        if(currentCell.mine) {
-            for (auto & adjacentCell : adjacentCells) {
-                adjacentCell.increaseCellNumber();
+
+// Define os numeros das celulas verificando se as celulas adjacentes sao minas
+void board::defineCellNumbers() {
+    changeAllAdjacent(list[], &Cell::increaseCellNumber);
+}
+
+void board::changeAllAdjacent(const bool cond, void (Cell::*method)()) {
+    for (int i = 0; i < list.size(); i++) {
+        if(cond) {
+            // calculando adjacentes para direita
+            if(i % size != size-1) { // direita
+                list[1+i].*method();
+                if(i > size) { // direita em cima
+                    list[i-size+1].*method();
+                }
+                if(i < list.size() - size) { // direita em baixo
+                    list[i+size+1].*method();
+                }
+            }
+            // calculando adjacentes para esquerda
+            if(i % size != 0) { // esquerda
+                list[i-1].*method();
+                if(i > size) { // esquerda em cima
+                    list[i-size-1].*method();
+                }
+                if(i < list.size() - size) { // esquerda em baixo
+                    list[i+size-1].*method();
+                }
+            }
+            //cima e baixo
+            if(i > size) { // cima
+                list[i-size].*method();
+            }
+            if(i < list.size() - size) { // baixo
+                list[i+size].*method();
             }
         }
     }
 }
-

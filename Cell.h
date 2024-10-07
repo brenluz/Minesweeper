@@ -10,9 +10,10 @@
 
 
 class Cell {
-    int cellNumber;
+    int cellNumber = 0;
     bool hidden = true;
     bool DefineMines();
+    bool revealed = true;
 
 public:
     explicit Cell(int row, int col);
@@ -20,8 +21,10 @@ public:
     std::string appearance;
     bool mine = false;
     std::pair<int, int> pos;
+    void disarmMine();
     void increaseCellNumber();
-    void changeAppearance(bool hidden);
+    void changeAppearance();
+    void revealCell();
 
     [[nodiscard]] int getCellNumber() const;
 

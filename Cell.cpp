@@ -9,13 +9,13 @@
 // Random number generator
 inline std::random_device rd;
 inline std::mt19937 gen(rd());
-inline std::bernoulli_distribution distrib(0.5);
+inline std::bernoulli_distribution distrib(0.4);
 
 
 // Constructor
 Cell::Cell(int row,int col) {
     DefineMines();
-    changeAppearance(hidden);
+    changeAppearance();
     cellNumber = 0;
     pos = std::make_pair(row, col);
 }
@@ -27,7 +27,7 @@ bool Cell::DefineMines() {
 }
 
 // Change the appearance of the Cell
-void Cell::changeAppearance(const bool hidden) {
+void Cell::changeAppearance() {
     if (hidden) {
         appearance = "#";
     } else {
@@ -45,6 +45,18 @@ int Cell::getCellNumber() const {
     return cellNumber;
 }
 
+// Increase the cell number property by 1
 void Cell::increaseCellNumber() {
     cellNumber++;
+    changeAppearance();
+}
+
+void Cell::disarmMine() {
+    mine = false;
+}
+// Reveal the cell chosen by the player, changing the appearance by changing the hidden attribute
+void Cell::revealCell() {
+    revealed = true;
+    hidden = false;
+    changeAppearance();
 }

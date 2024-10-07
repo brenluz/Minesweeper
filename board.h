@@ -11,11 +11,13 @@
 
 class board {
     int size;
-
+    void changeAllAdjacent(bool cond, void (Cell::*method)());
     void createBoard();
-    void defineCellNumbers() const;
+    void defineCellNumbers();
 
+    // static void raiseAdjacent(int mineIndex);
 public:
+    void revealCell(int row, int col);
     std::vector<Cell> list;
     explicit board(int size);
     void printBoard() const;
